@@ -98,6 +98,9 @@ const register = async (req, res, next) => {
  */
 const login = async (req, res, next) => {
   try {
+    // DEBUG: Log request body
+    console.log(req.body);
+
     const { email, password } = req.body;
 
     // Validasi input
@@ -106,16 +109,35 @@ const login = async (req, res, next) => {
     }
 
     // Cari user berdasarkan email
-    const user = await User.findOne({ where: { email } });
+    const user = await User.findOne({
+      where: {
+        email: req.body.email
+      }
+    });
+
+    // DEBUG: Log user yang ditemukan
+    console.log(user);
+
     if (!user) {
-      return errorResponse(res, 'Email atau password salah.', 401);
+      return res.status(404).json({
+        message: "User tidak ditemukan"
+      });
     }
 
     // Bandingkan password input dengan hash di database
     // bcrypt.compare otomatis mencocokkan dengan salt yang sama
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      return errorResponse(res, 'Email atau password salah.', 401);
+    const match = await bcrypt.compare(
+      req.body.password,
+      user.password
+    );
+
+    // DEBUG: Log hasil compare password
+    console.log(match);
+
+    if (!match) {
+      return res.status(400).json({
+        message: "Password salah"
+      });
     }
 
     // Generate JWT token
