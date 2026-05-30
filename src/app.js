@@ -33,8 +33,6 @@ const mediaRoutes = require('./routes/mediaRoutes');
 const pmbSettingRoutes = require('./routes/pmbSettingRoutes');
 const createCrudRoutes = require('./routes/resourceRoutes');
 
-// Import seeder routes || hapus setelah seeder berjalan > lanjut ke baris 108
-// const seederRoutes = require('./routes/seederRoutes');
 
 // Import models untuk resource routes
 const { Teacher, Achievement, Extracurricular, Facility, Alumni, Schedule } = require('./models');
@@ -110,8 +108,6 @@ app.use('/api/home-settings', homeSettingRoutes);
 app.use('/api/media', mediaRoutes);
 app.use('/api/pmb-settings', pmbSettingRoutes);
 
-// Import seeder routes || hapus setelah seeder berjalan
-// app.use('/api/seeder', seederRoutes);
 
 // Resource routes (menggunakan factory pattern)
 app.use('/api/teachers', createCrudRoutes(Teacher, 'Guru', 'photo'));
